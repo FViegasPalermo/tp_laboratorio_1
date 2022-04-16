@@ -48,48 +48,125 @@ Para ello el programa iniciará y contará con un menú de opciones:
 
 int main(void) {
 
+	setbuf(stdout,NULL);
+
+
 	float kms;
 	float y; //Precio vuelo Aerolineas
 	float z; //Precio vuelo Latam
+	int menuDeOpciones=0;
+	int submenuDeOpciones=0;
+	int flagKilometros=0;
+	float precioDebitoAerolineas;
+	float precioDebitoLatam;
+	float precioCreditoAerolineas;
+	float precioCreditoLatam;
+	float precioBitcoinAerolineas;
+	float precioBitcoinLatam;
+	float precioUnitarioAerolineas;
+	float precioUnitarioLatam;
+	float dif;
 
-
-
-	setbuf(stdout,NULL);
 
 	do{
-
-		printf ("Bienvenido a AgenTour");
-		printf ("1. Ingresar Kilómetros: ( km=x) : %f\n",kms);
-		printf ("2. Ingresar Precio de Vuelos: (Aerolíneas=y, Latam=z)\n");
-		printf ("Precio vuelo Aerolineas:  %f\n",y);
-		printf ("Precio vuelo Latam:  %f\n",z);
-		printf ("3. Calcular todos los costos\n");
-		printf ("a) Tarjeta de débito (descuento 10%) \n ");
-		printf ("b) Tarjeta de crédito (interés 25%)\n ");
-		printf ("c) Bitcoin (1BTC -> 4606954.55 Pesos Argentinos) \n");
-		printf ("d) Mostrar precio por km (precio unitario) \n ");
-		printf ("e) Mostrar diferencia de precio ingresada (Latam - Aerolíneas) \n");
-		printf ("4-Informar  resultados\n");
+		menuDeOpciones=Menu( kms, y, z);
 
 
-		printf ("5. Carga forzada de datos");
-		printf ("6. Salir\n");
-
-	switch (opcion)
+	switch (menuDeOpciones)
 	{
 
 	case 1:
-		printf ("Ingrese")
+		printf ("Ingrese kilometros: ");
+		scanf ("%f",&kms);
+		flagKilometros=1;
+		break;
 
+	case 2:
+		if (flagKilometros==0)
+		{
+			printf ("Error. Por favor ingrese los kilometros: ");
+		}
+		else
+
+		{
+			submenuDeOpciones=subMenu();
+			switch (submenuDeOpciones)
+			{
+			case 1:
+				printf ("Ingrese precio vuelo Aerolineas: \n");
+				scanf("%f",&y);
+
+				break;
+
+			case 2:
+				printf ("Ingrese precio vuelo Latam: \n");
+				scanf("%f",&z);
+
+				break;
+
+			}
+		}break;
+
+	case 3:
+
+					precioDebitoAerolineas = PrecioDebito(y);
+					precioDebitoLatam = PrecioDebito(z);
+					precioCreditoAerolineas = PrecioCredito(y);
+					precioCreditoLatam = PrecioCredito(z);
+					precioBitcoinAerolineas = PrecioBitcoin(y);
+					precioBitcoinLatam = PrecioBitcoin(z);
+					precioUnitarioAerolineas = PrecioPorKilometro(y, kms);
+					precioUnitarioLatam = PrecioPorKilometro(z,kms);
+					dif = PrecioDiferencia(y,z);
+
+					printf("Estamos calculando el costo de su vuelo \n\n");
+
+					break;
+
+	case 4:
+
+		informarResultados (precioDebitoAerolineas, precioDebitoLatam,
+				precioCreditoAerolineas, precioCreditoLatam,
+				precioBitcoinAerolineas, precioBitcoinLatam,
+				precioUnitarioAerolineas, precioUnitarioLatam,
+				dif);
+
+				break;
+
+	case 5:
+		//Carga forzada de datos (resultados harcodeados)
+		kms = 7090;
+		y = 162965;
+		z = 159339;
+
+		precioDebitoAerolineas = PrecioDebito(y);
+		precioDebitoLatam = PrecioDebito(z);
+		precioCreditoAerolineas = PrecioCredito(y);
+		precioCreditoLatam = PrecioCredito(z);
+		precioBitcoinAerolineas = PrecioBitcoin(y);
+		precioBitcoinLatam = PrecioBitcoin(z);
+		precioUnitarioAerolineas = PrecioPorKilometro(y,kms);
+		precioUnitarioLatam = PrecioPorKilometro(z,kms);
+		dif = PrecioDiferencia(y,z);
+
+		informarResultadosHarcodeados(precioDebitoAerolineas,
+		precioDebitoLatam, precioCreditoAerolineas,
+		precioCreditoLatam, precioBitcoinAerolineas,
+		precioBitcoinLatam, precioUnitarioAerolineas,
+		precioUnitarioLatam, dif, kms,
+		y, z);
+
+		break;
+
+	case 6:
+
+		printf ("Gracias por elegir AgenTour");
+
+		break;
 
 	}
 
-
-
-
-
-
-
-
+	}while(menuDeOpciones != 6);
 	return EXIT_SUCCESS;
 }
+
